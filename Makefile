@@ -14,3 +14,27 @@ BUILD_DIRECTORY_PATH = "generate/unix"
 
 include generate/unix/Makefile.config
 include generate/unix/Makefile.common
+
+check:
+	cd tests
+
+	# ASL tests
+	$(CURDIR)/tests/aslts.sh $(CURDIR)/tests/aslts $(CURDIR)/generate/unix
+
+	# API Tests
+	$(CURDIR)/debian/run-aapits.sh $(CURDIR)/tests/aapits $(CURDIR)/generate/unix/bin
+
+	# misc tests
+	$(CURDIR)/debian/run-misc-tests.sh $(CURDIR) 20130626
+
+	# Template tests
+	cd $(CURDIR)/tests/templates
+	make
+	if [ -f diff.log ] ; \
+	then \
+		if [ -s diff.log ] ; \
+		then \
+			exit 1		# implies errors occurred ; \
+		fi ; \
+	fi
+
