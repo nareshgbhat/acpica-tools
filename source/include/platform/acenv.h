@@ -137,6 +137,9 @@
 
 
 /*! [Begin] no source code translation */
+#if defined(__GLIBC__)
+#include <stdint.h>
+#endif
 
 /******************************************************************************
  *
