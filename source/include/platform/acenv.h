@@ -148,7 +148,7 @@
  *
  *****************************************************************************/
 
-#if defined(_LINUX) || defined(__linux__)
+#if defined(_LINUX) || defined(__linux__) || defined(__GNU__)
 #include "aclinux.h"
 
 #elif defined(_APPLE) || defined(__APPLE__)
