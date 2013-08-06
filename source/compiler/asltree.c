@@ -577,28 +577,31 @@ TrCreateValuedLeafNode (
         "\nCreateValuedLeafNode  Ln/Col %u/%u NewNode %p  Op %s  Value %8.8X%8.8X  ",
         Op->Asl.LineNumber, Op->Asl.Column, Op, UtGetOpName(ParseOpcode),
         ACPI_FORMAT_UINT64 (Value));
-    Op->Asl.Value.Integer = Value;
 
     switch (ParseOpcode)
     {
     case PARSEOP_STRING_LITERAL:
 
-        DbgPrint (ASL_PARSE_OUTPUT, "STRING->%s", Value);
+        Op->Asl.Value.String = (ACPI_STRING) (ACPI_SIZE) Value;
+        DbgPrint (ASL_PARSE_OUTPUT, "STRING->%s", Op->Asl.Value.String);
         break;
 
     case PARSEOP_NAMESEG:
 
-        DbgPrint (ASL_PARSE_OUTPUT, "NAMESEG->%s", Value);
+        Op->Asl.Value.String = (ACPI_STRING) (ACPI_SIZE) Value;
+        DbgPrint (ASL_PARSE_OUTPUT, "NAMESEG->%s", Op->Asl.Value.String);
         break;
 
     case PARSEOP_NAMESTRING:
 
-        DbgPrint (ASL_PARSE_OUTPUT, "NAMESTRING->%s", Value);
+        Op->Asl.Value.String = (ACPI_STRING) (ACPI_SIZE) Value;
+        DbgPrint (ASL_PARSE_OUTPUT, "NAMESTRING->%s", Op->Asl.Value.String);
         break;
 
     case PARSEOP_EISAID:
 
-        DbgPrint (ASL_PARSE_OUTPUT, "EISAID->%s", Value);
+        Op->Asl.Value.String = (ACPI_STRING) (ACPI_SIZE) Value;
+        DbgPrint (ASL_PARSE_OUTPUT, "EISAID->%s", Op->Asl.Value.String);
         break;
 
     case PARSEOP_METHOD:
@@ -608,11 +611,13 @@ TrCreateValuedLeafNode (
 
     case PARSEOP_INTEGER:
 
+        Op->Asl.Value.Integer = Value;
         DbgPrint (ASL_PARSE_OUTPUT, "INTEGER");
         break;
 
     default:
 
+        Op->Asl.Value.Integer = Value;
         break;
     }
 

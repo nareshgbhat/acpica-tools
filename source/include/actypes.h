@@ -142,6 +142,19 @@ typedef COMPILER_DEPENDENT_INT64        INT64;
  */
 #define ACPI_THREAD_ID                  UINT64
 
+/*
+ * In the case of the Itanium Processor Family (IPF), the hardware does not
+ * support misaligned memory transfers. Set the MISALIGNMENT_NOT_SUPPORTED flag
+ * to indicate that special precautions must be taken to avoid alignment faults.
+ * (IA64 or ia64 is currently used by existing compilers to indicate IPF.)
+ *
+ * Note: EM64T and other X86-64 processors support misaligned transfers,
+ * so there is no need to define this flag.
+ */
+#if defined (__IA64__) || defined (__ia64__) || defined(__alpha__) || defined(__sparc__) || defined(__hppa__) || defined(__arm__)
+#define ACPI_MISALIGNMENT_NOT_SUPPORTED
+#endif
+
 
 /*******************************************************************************
  *
@@ -167,19 +180,6 @@ typedef UINT64                          ACPI_PHYSICAL_ADDRESS;
 #define ACPI_MAX_PTR                    ACPI_UINT64_MAX
 #define ACPI_SIZE_MAX                   ACPI_UINT64_MAX
 #define ACPI_USE_NATIVE_DIVIDE          /* Has native 64-bit integer support */
-
-/*
- * In the case of the Itanium Processor Family (IPF), the hardware does not
- * support misaligned memory transfers. Set the MISALIGNMENT_NOT_SUPPORTED flag
- * to indicate that special precautions must be taken to avoid alignment faults.
- * (IA64 or ia64 is currently used by existing compilers to indicate IPF.)
- *
- * Note: EM64T and other X86-64 processors support misaligned transfers,
- * so there is no need to define this flag.
- */
-#if defined (__IA64__) || defined (__ia64__)
-#define ACPI_MISALIGNMENT_NOT_SUPPORTED
-#endif
 
 
 /*******************************************************************************

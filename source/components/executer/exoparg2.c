@@ -175,6 +175,8 @@ AcpiExOpcode_2A_2T_1R (
     ACPI_OPERAND_OBJECT     **Operand = &WalkState->Operands[0];
     ACPI_OPERAND_OBJECT     *ReturnDesc1 = NULL;
     ACPI_OPERAND_OBJECT     *ReturnDesc2 = NULL;
+    UINT64                  ReturnValue1 = 0;
+    UINT64                  ReturnValue2 = 0;
     ACPI_STATUS             Status;
 
 
@@ -208,8 +210,10 @@ AcpiExOpcode_2A_2T_1R (
 
         Status = AcpiUtDivide (Operand[0]->Integer.Value,
                                Operand[1]->Integer.Value,
-                               &ReturnDesc1->Integer.Value,
-                               &ReturnDesc2->Integer.Value);
+                               &ReturnValue1, &ReturnValue2);
+        ReturnDesc1->Integer.Value = ReturnValue1;
+        ReturnDesc2->Integer.Value = ReturnValue2;
+
         if (ACPI_FAILURE (Status))
         {
             goto Cleanup;
@@ -283,6 +287,7 @@ AcpiExOpcode_2A_1T_1R (
     ACPI_OPERAND_OBJECT     **Operand = &WalkState->Operands[0];
     ACPI_OPERAND_OBJECT     *ReturnDesc = NULL;
     UINT64                  Index;
+    UINT64                  ReturnValue = 0;
     ACPI_STATUS             Status = AE_OK;
     ACPI_SIZE               Length = 0;
 
@@ -326,7 +331,8 @@ AcpiExOpcode_2A_1T_1R (
         Status = AcpiUtDivide (Operand[0]->Integer.Value,
                                Operand[1]->Integer.Value,
                                NULL,
-                               &ReturnDesc->Integer.Value);
+                               &ReturnValue);
+        ReturnDesc->Integer.Value = ReturnValue;
         break;
 
     case AML_CONCAT_OP: /* Concatenate (Data1, Data2, Result) */
