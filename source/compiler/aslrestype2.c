@@ -79,6 +79,7 @@ RsDoGeneralRegisterDescriptor (
     AML_RESOURCE            *Descriptor;
     ACPI_PARSE_OBJECT       *InitializerOp;
     ASL_RESOURCE_NODE       *Rnode;
+    UINT16                  ResourceLength;
     UINT32                  i;
 
 
@@ -87,7 +88,9 @@ RsDoGeneralRegisterDescriptor (
 
     Descriptor = Rnode->Buffer;
     Descriptor->GenericReg.DescriptorType = ACPI_RESOURCE_NAME_GENERIC_REGISTER;
-    Descriptor->GenericReg.ResourceLength = 12;
+    ResourceLength = 12;
+    ACPI_MOVE_16_TO_16(&Descriptor->GenericReg.ResourceLength,
+		    &ResourceLength);
 
     /* Process all child initialization nodes */
 
@@ -118,7 +121,8 @@ RsDoGeneralRegisterDescriptor (
 
         case 3: /* Register Address */
 
-            Descriptor->GenericReg.Address = InitializerOp->Asl.Value.Integer;
+	    ACPI_MOVE_64_TO_64(&Descriptor->GenericReg.Address,
+			    &InitializerOp->Asl.Value.Integer);
             RsCreateQwordField (InitializerOp, ACPI_RESTAG_ADDRESS,
                 CurrentByteOffset + ASL_RESDESC_OFFSET (GenericReg.Address));
             break;
@@ -176,6 +180,7 @@ RsDoInterruptDescriptor (
     AML_RESOURCE            *Rover = NULL;
     ACPI_PARSE_OBJECT       *InitializerOp;
     ASL_RESOURCE_NODE       *Rnode;
+    UINT16                  ResourceLength = 0;
     UINT16                  StringLength = 0;
     UINT32                  OptionIndex = 0;
     UINT32                  i;
@@ -222,7 +227,7 @@ RsDoInterruptDescriptor (
      * Initial descriptor length -- may be enlarged if there are
      * optional fields present
      */
-    Descriptor->ExtendedIrq.ResourceLength  = 2;  /* Flags and table length byte */
+    ResourceLength  = 2;  /* Flags and table length byte */
     Descriptor->ExtendedIrq.InterruptCount  = 0;
 
     Rover = ACPI_CAST_PTR (AML_RESOURCE,
@@ -330,10 +335,11 @@ RsDoInterruptDescriptor (
 
             /* Save the integer and move pointer to the next one */
 
-            Rover->DwordItem = (UINT32) InitializerOp->Asl.Value.Integer;
+            ACPI_MOVE_64_TO_32(&Rover->DwordItem,
+                &InitializerOp->Asl.Value.Integer);
             Rover = ACPI_ADD_PTR (AML_RESOURCE, &(Rover->DwordItem), 4);
             Descriptor->ExtendedIrq.InterruptCount++;
-            Descriptor->ExtendedIrq.ResourceLength += 4;
+            ResourceLength += 4;
 
             /* Case 7: First interrupt number in list */
 
@@ -369,7 +375,7 @@ RsDoInterruptDescriptor (
     {
         Rover->ByteItem = ResSourceIndex;
         Rover = ACPI_ADD_PTR (AML_RESOURCE, &(Rover->ByteItem), 1);
-        Descriptor->ExtendedIrq.ResourceLength += 1;
+        ResourceLength += 1;
     }
 
     /* Add optional ResSource string if present */
@@ -381,13 +387,14 @@ RsDoInterruptDescriptor (
         Rover = ACPI_ADD_PTR (
                     AML_RESOURCE, &(Rover->ByteItem), StringLength);
 
-        Descriptor->ExtendedIrq.ResourceLength = (UINT16)
-            (Descriptor->ExtendedIrq.ResourceLength + StringLength);
+        ResourceLength = (UINT16) (ResourceLength + StringLength);
     }
 
     Rnode->BufferLength = (ASL_RESDESC_OFFSET (ExtendedIrq.Interrupts[0]) -
                            ASL_RESDESC_OFFSET (ExtendedIrq.DescriptorType))
                            + OptionIndex + StringLength;
+    ACPI_MOVE_16_TO_16(&Descriptor->ExtendedIrq.ResourceLength,
+		    &ResourceLength);
     return (Rnode);
 }
 
@@ -438,7 +445,7 @@ RsDoVendorLargeDescriptor (
 
     Descriptor = Rnode->Buffer;
     Descriptor->VendorLarge.DescriptorType  = ACPI_RESOURCE_NAME_VENDOR_LARGE;
-    Descriptor->VendorLarge.ResourceLength = (UINT16) i;
+    ACPI_MOVE_32_TO_16(&Descriptor->VendorLarge.ResourceLength, &i);
 
     /* Point to end-of-descriptor for vendor data */
 

@@ -81,13 +81,14 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <unistd.h>
+#include <endian.h>
 
 /* Host-dependent types and defines for user-space ACPICA */
 
 #define ACPI_FLUSH_CPU_CACHE()
 #define ACPI_CAST_PTHREAD_T(pthread) ((ACPI_THREAD_ID) (pthread))
 
-#if defined(__ia64__) || defined(__x86_64__)
+#if __SIZEOF_LONG__ == 8
 #define ACPI_MACHINE_WIDTH          64
 #define COMPILER_DEPENDENT_INT64    long
 #define COMPILER_DEPENDENT_UINT64   unsigned long
@@ -96,6 +97,10 @@
 #define COMPILER_DEPENDENT_INT64    long long
 #define COMPILER_DEPENDENT_UINT64   unsigned long long
 #define ACPI_USE_NATIVE_DIVIDE
+#endif
+
+#if __BYTE_ORDER == __BIG_ENDIAN
+#define ACPI_BIG_ENDIAN
 #endif
 
 #ifndef __cdecl
