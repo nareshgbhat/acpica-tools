@@ -622,13 +622,15 @@ ACPI_OSXF_EMUL_REG
 #if ACPI_MACHINE_WIDTH == 64
 #ifdef    _MSC_VER
         printf("OsxfCtrlFingReg: unexpected Width %d of Reg 0x%I64x\n",
+            Width, Address);
 #else
         printf("OsxfCtrlFingReg: unexpected Width %d of Reg 0x%llx\n",
+            Width, (long long unsigned int) Address);
 #endif
 #else
         printf("OsxfCtrlFingReg: unexpected Width %d of Reg 0x%x\n",
-#endif
             Width, Address);
+#endif
         return (NULL);
     }
 
@@ -649,15 +651,19 @@ ACPI_OSXF_EMUL_REG
 #ifdef    _MSC_VER
                 printf("OsxfCtrlFingReg: intersection Regs (0x%I64x: 0x%x)"
                     " and (0x%I64x: 0x%x)\n",
+                    Reg->Address, Reg->Width, Address, Width);
 #else
                 printf("OsxfCtrlFingReg: intersection Regs (0x%llx: 0x%x)"
                     " and (0x%llx: 0x%x)\n",
+                    (long long unsigned int) Reg->Address,
+		    Reg->Width,
+		    (long long unsigned int) Address, Width);
 #endif
 #else
                 printf("OsxfCtrlFingReg: intersection Regs (0x%x: 0x%x)"
                     " and (0x%x: 0x%x)\n",
-#endif
                     Reg->Address, Reg->Width, Address, Width);
+#endif
                 return (NULL);
             }
         }
@@ -671,13 +677,15 @@ ACPI_OSXF_EMUL_REG
 #if ACPI_MACHINE_WIDTH == 64
 #ifdef    _MSC_VER
             printf("OsxfCtrlFingReg: no memory for Reg (0x%I64x: 0x%x)\n",
+                Reg->Address, Reg->Width);
 #else
             printf("OsxfCtrlFingReg: no memory for Reg (0x%llx: 0x%x)\n",
+                (long long unsigned int) Reg->Address, Reg->Width);
 #endif
 #else
             printf("OsxfCtrlFingReg: no memory for Reg (0x%x: 0x%x)\n",
-#endif
                 Reg->Address, Reg->Width);
+#endif
             return (NULL);
         }
         Reg->Type = Type;
@@ -817,14 +825,19 @@ OsxfCtrlRegService(UINT32 ServiceFlag)
 #if ACPI_MACHINE_WIDTH == 64
 #ifdef    _MSC_VER
             printf("%.2u (%s Address 0x%I64x: Width %.2u) r/w counts: %u/%u\n",
+                i, (Reg->Type == EMUL_REG_SYS)? "SYS": "IO",
+                Reg->Address, Reg->Width, Reg->ReadCount, Reg->WriteCount);
 #else
             printf("%.2u (%s Address 0x%llx: Width %.2u) r/w counts: %u/%u\n",
+                i, (Reg->Type == EMUL_REG_SYS)? "SYS": "IO",
+                (long long unsigned int) Reg->Address,
+		Reg->Width, Reg->ReadCount, Reg->WriteCount);
 #endif
 #else
             printf("%.2u (%s Address 0x%.4x: Width %.2u) r/w counts: %u/%u\n",
-#endif
                 i, (Reg->Type == EMUL_REG_SYS)? "SYS": "IO",
                 Reg->Address, Reg->Width, Reg->ReadCount, Reg->WriteCount);
+#endif
             Reg = Reg->Next;
             i++;
         }

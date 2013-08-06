@@ -2915,7 +2915,7 @@ AtInitTest0041(void)
             AapiErrors++;
             printf ("API Error: AcpiGetSystemInfo() returned"
                 " Length %d, expected %d\n",
-                OutBuffer.Length, sizeof (Info));
+                (int) OutBuffer.Length, (int) sizeof (Info));
             return (AE_ERROR);
         }
 
@@ -2937,7 +2937,7 @@ AtInitTest0041(void)
             AapiErrors++;
             printf ("API Error: AcpiGetSystemInfo() returned"
                 " Length %d, expected %d\n",
-                OutBuffer.Length, sizeof (Info));
+                (int) OutBuffer.Length, (int) sizeof (Info));
             return (AE_ERROR);
         }
 
@@ -2957,7 +2957,7 @@ AtInitTest0041(void)
             AapiErrors++;
             printf ("API Error: AcpiGetSystemInfo() returned"
                 " Length %d, expected %d\n",
-                OutBuffer.Length, sizeof (Info));
+                (int) OutBuffer.Length, (int) sizeof (Info));
             return (AE_ERROR);
         }
         else if (OutBuffer.Pointer != &Info)
@@ -3040,7 +3040,7 @@ AtInitTest0042(void)
             AapiErrors++;
             printf ("API Error: AcpiGetSystemInfo() returned"
                 " Length %d, expected %d\n",
-                OutBuffer.Length, sizeof (Info));
+                (int) OutBuffer.Length, (int) sizeof (Info));
             return (AE_ERROR);
         }
         else if (OutBuffer.Pointer != &Info)
@@ -3105,7 +3105,7 @@ AtInitTest0043(void)
             AapiErrors++;
             printf ("API Error: AcpiGetSystemInfo() returned"
                 " Length %d, expected %d\n",
-                OutBuffer.Length, sizeof (ACPI_SYSTEM_INFO));
+                (int) OutBuffer.Length, (int) sizeof (ACPI_SYSTEM_INFO));
             return (AE_ERROR);
         }
         else

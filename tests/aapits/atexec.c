@@ -530,6 +530,7 @@ AtBuildLocalFADT2 (
 }
 
 
+#if ACPI_MACHINE_WIDTH == 32
 /*******************************************************************************
  *
  * FUNCTION:    AtBuildLocalRSDT
@@ -648,6 +649,7 @@ AtBuildLocalRSDT (
         LocalRSDT->Header.Checksum = (UINT8)~LocalRSDT->Header.Checksum;
     }
 }
+#endif
 
 
 /*******************************************************************************
@@ -1315,7 +1317,7 @@ AeRegionHandler (
         ACPI_WARNING ((AE_INFO,
             "Request on [%4.4s] is beyond region limit Req-%X+%X, Base=%X, Len-%X\n",
             (RegionObject->Region.Node)->Name.Ascii, (UINT32) Address,
-            ByteWidth, (UINT32) BufferAddress, Length));
+            ByteWidth, (UINT32) BufferAddress, (UINT32) Length));
 
         return (AE_AML_REGION_LIMIT);
     }
@@ -1683,7 +1685,9 @@ AtCheckInteger(
             Path, Obj.Integer.Value, Value);
 #else
         printf ("API Error: Value of %s is 0x%llx instead of expected 0x%llx\n",
-            Path, Obj.Integer.Value, Value);
+            Path,
+	    (long long unsigned int) Obj.Integer.Value,
+	    (long long unsigned int) Value);
 #endif
         Status = AE_ERROR;
     }
@@ -1762,7 +1766,7 @@ AtCheckString(
     {
         TestErrors++;
         printf ("Test Error: cannot allocate buffer of %d bytes\n",
-            Results.Length);
+                (int) Results.Length);
         return (AE_NO_MEMORY);
     }
     Results.Pointer = Object;
@@ -1843,7 +1847,8 @@ AtCheckBuffer(
     {
         printf ("AtCheckBuffer: unexpected length %d of Buffer vs"
             " calculated %d bytes\n",
-            Results.Length, ACPI_ROUND_UP_TO_NATIVE_WORD(sizeof (ACPI_OBJECT) + Length));
+            (int)Results.Length,
+	    (int)(ACPI_ROUND_UP_TO_NATIVE_WORD(sizeof (ACPI_OBJECT) + Length)));
     }
 
     /* Initialize the return buffer structure */
@@ -1852,7 +1857,7 @@ AtCheckBuffer(
     {
         TestErrors++;
         printf ("Test Error: cannot allocate buffer of %d bytes\n",
-            Results.Length);
+            (int) Results.Length);
         return (AE_NO_MEMORY);
     }
     Results.Pointer = Object;

@@ -2426,7 +2426,8 @@ AtGetObjectInfoTypeCommon(
 #else
                 printf ("API Error: Address of %s (0x%llX) != (0x%llX)\n",
                     PathNames[2 * i + 1],
-                    Info->Address, ExpectedInfo[i].Address);
+                    (long long unsigned int) Info->Address,
+		    (long long unsigned int) ExpectedInfo[i].Address);
 #endif
 #else
                 printf ("API Error: Address of %s (0x%X) != (0x%X)\n",
@@ -2799,7 +2800,8 @@ AtGetNextObjectTypeCommon(
         TestErrors++;
         printf ("AtGetNextObjectTypeCommon: different numbers of entities"
             "in TypesNames (%d) and LevelTypes0000 (%d)\n",
-            TypesCount, sizeof (LevelTypes0000) / sizeof (ACPI_OBJECT_TYPE));
+            TypesCount,
+	    (int) (sizeof (LevelTypes0000) / sizeof (ACPI_OBJECT_TYPE)));
         return (AE_ERROR);
     }
 
@@ -4083,7 +4085,9 @@ AtCheckHandlePathMapping(
             Pathname, Obj.Integer.Value, Value);
 #else
         printf ("API Error: Value of %s is 0x%llx instead of expected 0x%llx\n",
-            Pathname, Obj.Integer.Value, Value);
+            Pathname,
+	    (long long unsigned int) Obj.Integer.Value,
+	    (long long unsigned int) Value);
 #endif
         Status = AE_ERROR;
     }
@@ -5090,7 +5094,7 @@ AtGetNameExceptionTest(
             {
                 AapiErrors++;
                 printf ("API Error: AcpiOsAllocate(%d) returned NULL\n",
-                    OutName.Length);
+                    (int) OutName.Length);
                 return (AE_ERROR);
             }
         }

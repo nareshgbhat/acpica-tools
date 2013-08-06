@@ -206,7 +206,7 @@ ExecuteTest (
     {
         printf ("ACPICA API TS err: test num %ld of test case %ld"
             " is not implemented\n",
-            test_num, test_case);
+            (long int) test_num, (long int) test_case);
         return (AtRetNotImpl);
     }
 
@@ -321,7 +321,7 @@ main(
     if (test_case < 1 || test_case > AT_TEST_CASE_NUM)
     {
         printf ("ACPICA API TS err: test case %ld is out of range 1 - %d\n",
-            test_case, AT_TEST_CASE_NUM);
+            (long int) test_case, (int) AT_TEST_CASE_NUM);
         return (AtRetBadParam);
     }
 
@@ -329,7 +329,7 @@ main(
     if (test_num < 0 || test_num > AtTestCase[test_case].TestsNum)
     {
         printf ("ACPICA API TS err: test num %ld is out of range 0 - %d\n",
-            test_num, AtTestCase[test_case].TestsNum);
+            (long int) test_num, AtTestCase[test_case].TestsNum);
         return (AtRetBadParam);
     }
 

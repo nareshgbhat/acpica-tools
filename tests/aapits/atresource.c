@@ -65,7 +65,7 @@ AtRsrcTest0000(void)
         AapiErrors++;
         printf ("API Error: AcpiGetCurrentResources(%s) returned Length %d,"
             " expected %d\n",
-            Pathname, OutBuffer.Length, RT0000_DEV0_CRS_LEN);
+            Pathname, (int) OutBuffer.Length, RT0000_DEV0_CRS_LEN);
         return (AE_ERROR);
     }
 
@@ -381,7 +381,7 @@ AtRsrcTest0005(void)
         AapiErrors++;
         printf ("API Error: AcpiGetCurrentResources(%s) returned Length %d,"
             " expected %d\n",
-            Pathname, OutBuffer.Length, RT0000_DEV0_CRS_LEN);
+            Pathname, (int) OutBuffer.Length, RT0000_DEV0_CRS_LEN);
         return (AE_ERROR);
     }
 
@@ -580,7 +580,7 @@ AtRsrcTest0007(void)
         AapiErrors++;
         printf ("Api Error: Resource->Length (%d) != %d\n",
             CurrentResource->Length,
-            ACPI_ROUND_UP_TO_NATIVE_WORD (ACPI_RS_SIZE (ACPI_RESOURCE_IRQ)));
+            (int) (ACPI_ROUND_UP_TO_NATIVE_WORD (ACPI_RS_SIZE (ACPI_RESOURCE_IRQ))));
     }
 
     if (CurrentResource->Data.Irq.Triggering != 0) /* Level-Triggered */
@@ -872,7 +872,7 @@ AtRsrcTest0012(void)
         AapiErrors++;
         printf ("API Error: AcpiGetPossibleResources(%s) returned Length %d,"
             " expected %d\n",
-            Pathname, OutBuffer.Length, RT0000_DEV0_CRS_LEN);
+            Pathname, (int) OutBuffer.Length, RT0000_DEV0_CRS_LEN);
         return (AE_ERROR);
     }
 
@@ -1814,7 +1814,7 @@ AtRsrcTest0026(void)
         AapiErrors++;
         printf ("API Error: AcpiGetIrqRoutingTable(%s) returned Length %d,"
             " expected %d\n",
-            Pathname, OutBuffer.Length, 0xA48);
+            Pathname, (int) OutBuffer.Length, 0xA48);
         return (AE_ERROR);
     }
 
